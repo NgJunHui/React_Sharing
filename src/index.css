@@ -1,0 +1,26 @@
+/* Only global concerns live here. Everything else is MUI sx or theme. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+@media print {
+  aside {
+    display: none !important;
+  }
+  main {
+    margin-left: 0 !important;
+  }
+}

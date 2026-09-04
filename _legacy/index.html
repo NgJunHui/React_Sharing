@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React and TypeScript for Backend Engineers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- ============================= SIDEBAR ============================= -->
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <div class="sidebar__mark">FE</div>
+        <div class="sidebar__brandtext">
+          <span class="sidebar__title">Frontend Crossover</span>
+          <span class="sidebar__subtitle">React &amp; TypeScript</span>
+        </div>
+      </div>
+
+      <nav class="sidebar__nav" id="sidebarNav">
+        <span class="sidebar__group">Foundation</span>
+        <a href="#intro" class="sidebar__link">Overview</a>
+        <a href="#component" class="sidebar__link">What is a Component</a>
+        <a href="#jsx" class="sidebar__link">JSX</a>
+        <a href="#props-state" class="sidebar__link">Props and State</a>
+        <a href="#effects" class="sidebar__link">Rendering and Effects</a>
+        <a href="#events" class="sidebar__link">Event Handling</a>
+
+        <span class="sidebar__group">Building Up</span>
+        <a href="#page" class="sidebar__link">How a Page is Built</a>
+        <a href="#state-mgmt" class="sidebar__link">State Management</a>
+        <a href="#data" class="sidebar__link">Data Fetching</a>
+
+        <span class="sidebar__group">TypeScript</span>
+        <a href="#ts-basics" class="sidebar__link">TypeScript Basics</a>
+        <a href="#ts-react" class="sidebar__link">TypeScript in React</a>
+        <a href="#ts-utility" class="sidebar__link">Utility Types</a>
+
+        <span class="sidebar__group">Our Stack</span>
+        <a href="#mui" class="sidebar__link">Material UI</a>
+        <a href="#forms" class="sidebar__link">React Hook Form</a>
+        <a href="#storybook" class="sidebar__link">Storybook</a>
+        <a href="#folders" class="sidebar__link">Folder Structure</a>
+
+        <span class="sidebar__group">Workflow</span>
+        <a href="#toolchain" class="sidebar__link">Vite and Toolchain</a>
+        <a href="#devtools" class="sidebar__link">React DevTools</a>
+        <a href="#recap" class="sidebar__link">Recap</a>
+      </nav>
+    </aside>
+
+    <!-- ============================= MAIN ============================= -->
+    <main class="main">
+      <!-- ---------- OVERVIEW ---------- -->
+      <section class="section" id="intro">
+        <div class="section__head">
+          <span class="section__num">00</span>
+          <h2 class="section__title">Overview</h2>
+        </div>
+
+        <p class="lede">
+          Every web page is built from three languages. They are separate
+          concerns with separate jobs, and everything else in this session sits
+          on top of them.
+        </p>
+
+        <div class="grid3">
+          <div class="card">
+            <span class="tag tag--blue">Structure</span>
+            <h4 class="card__title">HTML</h4>
+            <p class="card__desc">
+              The content and its meaning. Headings, paragraphs, inputs, buttons.
+              No styling, no behaviour.
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag tag--green">Presentation</span>
+            <h4 class="card__title">CSS</h4>
+            <p class="card__desc">
+              How it looks. Colour, spacing, size, position, responsiveness.
+              Selects elements and applies rules.
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag tag--yellow">Behaviour</span>
+            <h4 class="card__title">JavaScript</h4>
+            <p class="card__desc">
+              What happens. Responds to clicks, updates content, talks to APIs.
+              The only one of the three that is a programming language.
+            </p>
+          </div>
+        </div>
+
+        <p class="body">
+          The same button, expressed in all three. Each layer is independent, and
+          each can be changed without touching the others.
+        </p>
+
+        <pre class="code"><code><span class="c">&lt;!-- HTML: what it is --&gt;</span>
+&lt;<span class="t">button</span> <span class="a">id</span>=<span class="s">"save"</span> <span class="a">class</span>=<span class="s">"btn"</span>&gt;Save&lt;/<span class="t">button</span>&gt;
+
+<span class="c">/* CSS: how it looks */</span>
+.btn {
+  background: <span class="s">#141B4D</span>;
+  color: <span class="s">white</span>;
+  padding: <span class="s">8px 16px</span>;
+  border-radius: <span class="s">6px</span>;
+}
+
+<span class="c">// JavaScript: what it does</span>
+document.<span class="f">getElementById</span>(<span class="s">'save'</span>).<span class="f">addEventListener</span>(<span class="s">'click'</span>, () <span class="k">=></span> {
+  <span class="f">saveForm</span>();
+});</code></pre>
+
+        <h3 class="h3">Why frameworks exist</h3>
+        <p class="body">
+          Writing plain JavaScript works for a page or two. Once an application
+          has many screens sharing data, keeping the page in sync with that data
+          by hand becomes the bulk of the work, and the bulk of the bugs.
+          Frameworks exist to take that job over.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 880 210" class="diagram" role="img" aria-label="Plain JavaScript versus a framework">
+              <text x="200" y="24" class="dg-label">Plain JavaScript</text>
+              <rect x="60" y="40" width="130" height="46" rx="6" class="dg-box dg-box--soft" />
+              <text x="125" y="68" class="dg-text dg-text--sm">Your data</text>
+              <rect x="250" y="40" width="130" height="46" rx="6" class="dg-box dg-box--soft" />
+              <text x="315" y="68" class="dg-text dg-text--sm">The page</text>
+              <path d="M196 63 L244 63" class="dg-line dg-line--arrow" />
+              <path d="M237 57 L246 63 L237 69" class="dg-line dg-line--arrow" />
+              <text x="220" y="112" class="dg-text dg-text--xs">you sync</text>
+              <text x="220" y="130" class="dg-text dg-text--xs">every change</text>
+              <text x="220" y="152" class="dg-text dg-text--mono">by hand</text>
+
+              <line x1="440" y1="30" x2="440" y2="180" class="dg-line" />
+
+              <text x="680" y="24" class="dg-label">With a framework</text>
+              <rect x="540" y="40" width="130" height="46" rx="6" class="dg-box dg-box--primary" />
+              <text x="605" y="68" class="dg-text dg-text--inv dg-text--sm">Your data</text>
+              <rect x="730" y="40" width="130" height="46" rx="6" class="dg-box" />
+              <text x="795" y="68" class="dg-text dg-text--sm">The page</text>
+              <path d="M676 63 L724 63" class="dg-line dg-line--arrow" />
+              <path d="M717 57 L726 63 L717 69" class="dg-line dg-line--arrow" />
+              <text x="700" y="112" class="dg-text dg-text--xs">framework syncs</text>
+              <text x="700" y="130" class="dg-text dg-text--xs">automatically</text>
+              <text x="700" y="152" class="dg-text dg-text--mono">you change data only</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 1. You update the data. The framework works out what the page
+            should look like and updates it for you.
+          </p>
+        </div>
+
+        <h3 class="h3">The main frameworks</h3>
+        <p class="body">
+          They solve the same problem in different styles. The concepts move
+          across: learn one properly and the others are mostly new syntax.
+        </p>
+
+        <div class="maptable maptable--three">
+          <div class="maptable__row maptable__row--head">
+            <span>Framework</span>
+            <span>Backed by</span>
+            <span>Character</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>React</code></span>
+            <span>Meta</span>
+            <span>A library, not a full framework. You pick your own router and data layer. Largest ecosystem</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Angular</code></span>
+            <span>Google</span>
+            <span>Full framework. Routing, forms, and HTTP included and opinionated. TypeScript by default</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Vue</code></span>
+            <span>Community</span>
+            <span>Middle ground. Gentle learning curve, official router and store available</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Svelte</code></span>
+            <span>Community</span>
+            <span>Compiles away at build time. Less runtime code shipped to the browser</span>
+          </div>
+        </div>
+
+        <div class="callout">
+          <span class="callout__label">Our choice</span>
+          <p>
+            We use <strong>React</strong>. Everything from here on is React, but
+            the underlying ideas of components, state, and one way data flow
+            apply to all of them.
+          </p>
+        </div>
+
+        <h3 class="h3">What is TypeScript</h3>
+        <p class="body">
+          TypeScript is JavaScript with type annotations added. It is a
+          superset: every valid JavaScript file is already valid TypeScript. You
+          add types where they help, and a checker catches mistakes while you
+          write rather than when a user hits them.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 880 170" class="diagram" role="img" aria-label="TypeScript is a superset of JavaScript">
+              <rect x="180" y="20" width="520" height="130" rx="10" class="dg-box dg-box--soft" />
+              <text x="440" y="46" class="dg-text dg-text--xs">TypeScript</text>
+
+              <rect x="240" y="60" width="400" height="72" rx="8" class="dg-box" />
+              <text x="440" y="88" class="dg-text dg-text--sm">JavaScript</text>
+              <text x="440" y="112" class="dg-text dg-text--mono">everything you already write</text>
+
+              <text x="440" y="146" class="dg-text dg-text--mono">plus types, interfaces, generics</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 2. TypeScript adds a layer on top. Nothing is taken away.
+          </p>
+        </div>
+
+        <div class="split">
+          <div class="card card--bad">
+            <span class="tag tag--red">JavaScript</span>
+            <p class="card__desc">
+              Nothing complains until this runs, and then only if that exact line
+              is reached.
+            </p>
+            <pre class="code code--sm"><code><span class="k">function</span> <span class="f">total</span>(price, qty) {
+  <span class="k">return</span> price * qty;
+}
+
+<span class="f">total</span>(<span class="s">'10'</span>, <span class="n">3</span>);       <span class="c">// "101010"</span>
+<span class="f">total</span>(<span class="n">10</span>);            <span class="c">// NaN</span>
+<span class="f">total</span>(<span class="n">10</span>, <span class="n">3</span>, <span class="n">7</span>);      <span class="c">// silently ignored</span></code></pre>
+          </div>
+          <div class="card card--good">
+            <span class="tag tag--green">TypeScript</span>
+            <p class="card__desc">
+              All three mistakes are flagged in the editor, underlined in red,
+              before the file is even saved.
+            </p>
+            <pre class="code code--sm"><code><span class="k">function</span> <span class="f">total</span>(price: <span class="ty">number</span>, qty: <span class="ty">number</span>) {
+  <span class="k">return</span> price * qty;
+}
+
+<span class="f">total</span>(<span class="s">'10'</span>, <span class="n">3</span>);       <span class="c">// string not assignable</span>
+<span class="f">total</span>(<span class="n">10</span>);            <span class="c">// expected 2 arguments</span>
+<span class="f">total</span>(<span class="n">10</span>, <span class="n">3</span>, <span class="n">7</span>);      <span class="c">// expected 2, got 3</span></code></pre>
+          </div>
+        </div>
+
+        <h3 class="h3">What it adds</h3>
+        <div class="grid2">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">Errors while you type</h4>
+            <p class="card__desc">
+              Typos in property names, wrong argument counts, and values that
+              might be undefined surface in the editor instead of the browser.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">Autocomplete that knows the shape</h4>
+            <p class="card__desc">
+              Type a dot and the editor lists exactly what exists on that object.
+              This alone changes how fast you can move in unfamiliar code.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Safe renaming</h4>
+            <p class="card__desc">
+              Rename a field and every usage updates. Miss one and it is a
+              compile error, not a bug discovered in production.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">04</span>
+            <h4 class="card__title">Types as documentation</h4>
+            <p class="card__desc">
+              A function signature tells you what goes in and what comes out.
+              It cannot drift out of date the way a comment can.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">Important</span>
+          <p>
+            Types are checked at build time and then removed. The browser runs
+            plain JavaScript and knows nothing about them. TypeScript catches
+            mistakes before shipping, but it does not validate anything while the
+            app is running.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- COMPONENT ---------- -->
+      <section class="section" id="component">
+        <div class="section__head">
+          <span class="section__num">01</span>
+          <h2 class="section__title">What is a Component</h2>
+        </div>
+        <p class="lede">
+          A component is a function that takes an object of inputs and returns a
+          description of UI. That is the whole idea. Everything else in React is
+          built on top of it.
+        </p>
+
+        <pre class="code"><code><span class="c">// A component is a function. Input: props. Output: UI description.</span>
+<span class="k">function</span> <span class="f">StatusBadge</span>({ status, label }) {
+  <span class="k">return</span> &lt;<span class="t">span</span> <span class="a">className</span>={<span class="s">`badge badge--</span>${status}<span class="s">`</span>}&gt;{label}&lt;/<span class="t">span</span>&gt;;
+}
+
+<span class="c">// Used like an HTML tag. Capitalised name means "component".</span>
+&lt;<span class="t">StatusBadge</span> <span class="a">status</span>=<span class="s">"active"</span> <span class="a">label</span>=<span class="s">"Running"</span> /&gt;
+&lt;<span class="t">StatusBadge</span> <span class="a">status</span>=<span class="s">"failed"</span> <span class="a">label</span>=<span class="s">"Build failed"</span> /&gt;</code></pre>
+
+        <div class="grid3">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">It is just a function</h4>
+            <p class="card__desc">
+              No class required, no framework magic in the signature. If you can
+              write a function that returns a value, you can write a component.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">It must be pure</h4>
+            <p class="card__desc">
+              Same props in, same output out. No mutating inputs, no writing to
+              globals during render. Side effects belong in
+              <code>useEffect</code>.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Capitalisation matters</h4>
+            <p class="card__desc">
+              <code>&lt;button&gt;</code> is a DOM element.
+              <code>&lt;Button&gt;</code> is your component. React uses the case
+              of the first letter to decide.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="h3">The composition tree</h3>
+        <p class="body">
+          Components nest. A page is not one large function, it is a tree of
+          small ones. This is the same instinct as breaking a large service
+          class into smaller collaborators.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 900 340" class="diagram" role="img" aria-label="Component composition tree">
+              <!-- root -->
+              <rect x="360" y="20" width="180" height="46" rx="6" class="dg-box dg-box--primary" />
+              <text x="450" y="49" class="dg-text dg-text--inv">OrdersPage</text>
+
+              <!-- connectors -->
+              <path d="M450 66 L450 92 M170 92 L730 92 M170 92 L170 116 M450 92 L450 116 M730 92 L730 116" class="dg-line" />
+
+              <rect x="80" y="116" width="180" height="46" rx="6" class="dg-box" />
+              <text x="170" y="145" class="dg-text">PageHeader</text>
+
+              <rect x="360" y="116" width="180" height="46" rx="6" class="dg-box" />
+              <text x="450" y="145" class="dg-text">FilterBar</text>
+
+              <rect x="640" y="116" width="180" height="46" rx="6" class="dg-box" />
+              <text x="730" y="145" class="dg-text">OrderTable</text>
+
+              <!-- level 3 -->
+              <path d="M450 162 L450 186 M360 186 L540 186 M360 186 L360 210 M540 186 L540 210" class="dg-line" />
+              <rect x="280" y="210" width="160" height="44" rx="6" class="dg-box dg-box--soft" />
+              <text x="360" y="238" class="dg-text dg-text--sm">SearchInput</text>
+              <rect x="460" y="210" width="160" height="44" rx="6" class="dg-box dg-box--soft" />
+              <text x="540" y="238" class="dg-text dg-text--sm">DateRange</text>
+
+              <path d="M730 162 L730 186 M660 186 L800 186 M660 186 L660 210 M800 186 L800 210" class="dg-line" />
+              <rect x="640" y="210" width="120" height="44" rx="6" class="dg-box dg-box--soft" />
+              <text x="700" y="238" class="dg-text dg-text--sm">TableRow</text>
+              <rect x="780" y="210" width="110" height="44" rx="6" class="dg-box dg-box--soft" />
+              <text x="835" y="238" class="dg-text dg-text--sm">Pagination</text>
+
+              <!-- level 4 -->
+              <path d="M700 254 L700 278 M700 278 L700 290" class="dg-line" />
+              <rect x="620" y="290" width="160" height="42" rx="6" class="dg-box dg-box--soft" />
+              <text x="700" y="317" class="dg-text dg-text--sm">StatusBadge</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 1. A page is a tree. Leaf components are small, reusable, and
+            know nothing about the page they sit in.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- JSX ---------- -->
+      <section class="section" id="jsx">
+        <div class="section__head">
+          <span class="section__num">02</span>
+          <h2 class="section__title">JSX</h2>
+        </div>
+        <p class="lede">
+          JSX looks like HTML inside JavaScript. It is not a template language
+          and it is not string interpolation. It is syntax sugar that the build
+          step compiles into ordinary function calls.
+        </p>
+
+        <div class="compare">
+          <div class="compare__side">
+            <span class="compare__label">What you write</span>
+            <pre class="code code--sm"><code><span class="k">const</span> ui = (
+  &lt;<span class="t">div</span> <span class="a">className</span>=<span class="s">"card"</span>&gt;
+    &lt;<span class="t">h2</span>&gt;{title}&lt;/<span class="t">h2</span>&gt;
+    &lt;<span class="t">Badge</span> <span class="a">tone</span>=<span class="s">"success"</span> /&gt;
+  &lt;/<span class="t">div</span>&gt;
+);</code></pre>
+          </div>
+          <div class="compare__arrow" aria-hidden="true">
+            <svg viewBox="0 0 40 24" width="40" height="24">
+              <path d="M2 12 H32 M25 5 L33 12 L25 19" class="dg-line dg-line--arrow" />
+            </svg>
+          </div>
+          <div class="compare__side">
+            <span class="compare__label">What the compiler emits</span>
+            <pre class="code code--sm"><code><span class="k">const</span> ui = <span class="f">jsx</span>(<span class="s">'div'</span>, {
+  className: <span class="s">'card'</span>,
+  children: [
+    <span class="f">jsx</span>(<span class="s">'h2'</span>, { children: title }),
+    <span class="f">jsx</span>(Badge, { tone: <span class="s">'success'</span> })
+  ]
+});</code></pre>
+          </div>
+        </div>
+
+        <p class="body">
+          Because it compiles to a function call, the result is a plain
+          JavaScript object. You can store it in a variable, return it from a
+          conditional, or put it in an array. That is why there is no special
+          loop or if syntax in JSX: you use the JavaScript you already have.
+        </p>
+
+        <h3 class="h3">The rules that trip people up</h3>
+        <pre class="code"><code><span class="c">// 1. className, not class. "class" is a reserved word in JavaScript.</span>
+&lt;<span class="t">div</span> <span class="a">className</span>=<span class="s">"container"</span> /&gt;
+
+<span class="c">// 2. Attributes are camelCase.</span>
+&lt;<span class="t">input</span> <span class="a">onChange</span>={handleChange} <span class="a">maxLength</span>={<span class="n">40</span>} <span class="a">tabIndex</span>={<span class="n">0</span>} /&gt;
+
+<span class="c">// 3. Braces switch from markup back into JavaScript.</span>
+&lt;<span class="t">p</span>&gt;Total: {items.<span class="f">reduce</span>((sum, i) <span class="k">=></span> sum + i.price, <span class="n">0</span>)}&lt;/<span class="t">p</span>&gt;
+
+<span class="c">// 4. Conditionals use normal JS operators, not directives.</span>
+{isLoading &amp;&amp; &lt;<span class="t">Spinner</span> /&gt;}
+{error ? &lt;<span class="t">ErrorBanner</span> <span class="a">message</span>={error} /&gt; : &lt;<span class="t">OrderList</span> <span class="a">data</span>={data} /&gt;}
+
+<span class="c">// 5. Lists use .map(). Each item needs a stable "key".</span>
+&lt;<span class="t">ul</span>&gt;
+  {orders.<span class="f">map</span>((order) <span class="k">=></span> (
+    &lt;<span class="t">li</span> <span class="a">key</span>={order.id}&gt;{order.reference}&lt;/<span class="t">li</span>&gt;
+  ))}
+&lt;/<span class="t">ul</span>&gt;
+
+<span class="c">// 6. One root element. Use a fragment &lt;&gt;...&lt;/&gt; when you do not want a wrapper div.</span>
+&lt;&gt;
+  &lt;<span class="t">Header</span> /&gt;
+  &lt;<span class="t">Content</span> /&gt;
+&lt;/&gt;</code></pre>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">On keys</span>
+          <p>
+            <code>key</code> tells React which item is which between renders. Use
+            the record identifier from your API. Do not use the array index if
+            the list can be reordered, filtered, or have items removed, because
+            React will then reuse the wrong element and you get stale or
+            mismatched rows.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- PROPS AND STATE ---------- -->
+      <section class="section" id="props-state">
+        <div class="section__head">
+          <span class="section__num">03</span>
+          <h2 class="section__title">Props and State</h2>
+        </div>
+        <p class="lede">
+          Two ways data enters a component. Props come from the parent and are
+          read only. State is owned by the component and can change. Almost every
+          React design question reduces to deciding which one a piece of data
+          should be.
+        </p>
+
+        <div class="split">
+          <div class="card">
+            <span class="tag tag--blue">Props</span>
+            <h4 class="card__title">Passed in, never written to</h4>
+            <p class="card__desc">
+              Think of them as function arguments. The parent controls the value.
+              A component that only takes props and renders is predictable and
+              trivial to test.
+            </p>
+            <pre class="code code--sm"><code><span class="k">function</span> <span class="f">Price</span>({ amount, currency }) {
+  <span class="k">return</span> &lt;<span class="t">span</span>&gt;{currency} {amount.<span class="f">toFixed</span>(<span class="n">2</span>)}&lt;/<span class="t">span</span>&gt;;
+}
+
+<span class="c">// Parent decides the values</span>
+&lt;<span class="t">Price</span> <span class="a">amount</span>={<span class="n">42.5</span>} <span class="a">currency</span>=<span class="s">"SGD"</span> /&gt;</code></pre>
+          </div>
+
+          <div class="card">
+            <span class="tag tag--green">State</span>
+            <h4 class="card__title">Owned locally, triggers re-render</h4>
+            <p class="card__desc">
+              Calling the setter schedules a re-render. The variable itself is
+              never mutated. Never assign to it directly, React will not notice.
+            </p>
+            <pre class="code code--sm"><code><span class="k">function</span> <span class="f">Search</span>() {
+  <span class="k">const</span> [query, setQuery] = <span class="f">useState</span>(<span class="s">''</span>);
+
+  <span class="k">return</span> &lt;<span class="t">input</span>
+    <span class="a">value</span>={query}
+    <span class="a">onChange</span>={(e) <span class="k">=></span> <span class="f">setQuery</span>(e.target.value)}
+  /&gt;;
+}</code></pre>
+          </div>
+        </div>
+
+        <h3 class="h3">Data flows down, events flow up</h3>
+        <p class="body">
+          React is one directional. A parent hands data to a child as a prop. If
+          a child needs to change that data, the parent also hands it a callback.
+          The child calls it, the parent updates its own state, and the new value
+          flows back down.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 880 300" class="diagram" role="img" aria-label="Unidirectional data flow">
+              <rect x="330" y="18" width="220" height="70" rx="8" class="dg-box dg-box--primary" />
+              <text x="440" y="47" class="dg-text dg-text--inv">OrderFilters</text>
+              <text x="440" y="70" class="dg-text dg-text--invsm">owns: status</text>
+
+              <!-- down arrow -->
+              <path d="M370 88 L370 176" class="dg-line dg-line--arrow" />
+              <path d="M363 168 L370 178 L377 168" class="dg-line dg-line--arrow" />
+              <rect x="196" y="112" width="150" height="26" rx="4" class="dg-chip dg-chip--blue" />
+              <text x="271" y="130" class="dg-text dg-text--chip">status="open"</text>
+
+              <!-- up arrow -->
+              <path d="M510 176 L510 88" class="dg-line dg-line--arrow" />
+              <path d="M503 96 L510 86 L517 96" class="dg-line dg-line--arrow" />
+              <rect x="534" y="112" width="180" height="26" rx="4" class="dg-chip dg-chip--green" />
+              <text x="624" y="130" class="dg-text dg-text--chip">onChange("closed")</text>
+
+              <rect x="330" y="176" width="220" height="70" rx="8" class="dg-box" />
+              <text x="440" y="205" class="dg-text">StatusDropdown</text>
+              <text x="440" y="228" class="dg-text dg-text--sm">owns: nothing</text>
+
+              <text x="271" y="160" class="dg-label">props down</text>
+              <text x="624" y="160" class="dg-label">events up</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 2. The child never mutates the value it was given. It reports
+            an intention and lets the owner decide.
+          </p>
+        </div>
+
+        <pre class="code"><code><span class="c">// Parent owns the state and passes both value and setter down.</span>
+<span class="k">function</span> <span class="f">OrderFilters</span>() {
+  <span class="k">const</span> [status, setStatus] = <span class="f">useState</span>(<span class="s">'open'</span>);
+
+  <span class="k">return</span> (
+    &lt;&gt;
+      &lt;<span class="t">StatusDropdown</span> <span class="a">value</span>={status} <span class="a">onChange</span>={setStatus} /&gt;
+      &lt;<span class="t">OrderTable</span> <span class="a">status</span>={status} /&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="c">// Child is "controlled": it renders what it is told and reports changes.</span>
+<span class="k">function</span> <span class="f">StatusDropdown</span>({ value, onChange }) {
+  <span class="k">return</span> (
+    &lt;<span class="t">select</span> <span class="a">value</span>={value} <span class="a">onChange</span>={(e) <span class="k">=></span> <span class="f">onChange</span>(e.target.value)}&gt;
+      &lt;<span class="t">option</span> <span class="a">value</span>=<span class="s">"open"</span>&gt;Open&lt;/<span class="t">option</span>&gt;
+      &lt;<span class="t">option</span> <span class="a">value</span>=<span class="s">"closed"</span>&gt;Closed&lt;/<span class="t">option</span>&gt;
+    &lt;/<span class="t">select</span>&gt;
+  );
+}</code></pre>
+
+        <h3 class="h3">State updates are immutable</h3>
+        <p class="body">
+          React compares the old value to the new one by reference. If you mutate
+          an array or object in place, the reference does not change and React
+          concludes nothing happened. Always produce a new value.
+        </p>
+
+        <div class="split">
+          <div class="card card--bad">
+            <span class="tag tag--red">Will not re-render</span>
+            <pre class="code code--sm"><code>items.<span class="f">push</span>(newItem);
+<span class="f">setItems</span>(items);          <span class="c">// same array reference</span>
+
+user.name = <span class="s">'Wei Ling'</span>;
+<span class="f">setUser</span>(user);            <span class="c">// same object reference</span></code></pre>
+          </div>
+          <div class="card card--good">
+            <span class="tag tag--green">Correct</span>
+            <pre class="code code--sm"><code><span class="f">setItems</span>([...items, newItem]);
+
+<span class="f">setUser</span>({ ...user, name: <span class="s">'Wei Ling'</span> });
+
+<span class="c">// Depending on previous value? Use the function form.</span>
+<span class="f">setCount</span>((prev) <span class="k">=></span> prev + <span class="n">1</span>);</code></pre>
+          </div>
+        </div>
+
+        <h3 class="h3">Derived state is not state</h3>
+        <p class="body">
+          If a value can be calculated from existing props or state, calculate it
+          during render. Storing it separately means two sources of truth that
+          will drift apart.
+        </p>
+
+        <div class="split">
+          <div class="card card--bad">
+            <span class="tag tag--red">Redundant</span>
+            <pre class="code code--sm"><code><span class="k">const</span> [items, setItems] = <span class="f">useState</span>([]);
+<span class="k">const</span> [total, setTotal] = <span class="f">useState</span>(<span class="n">0</span>);
+
+<span class="c">// Now every setItems must remember</span>
+<span class="c">// to also call setTotal. It will not.</span></code></pre>
+          </div>
+          <div class="card card--good">
+            <span class="tag tag--green">Single source of truth</span>
+            <pre class="code code--sm"><code><span class="k">const</span> [items, setItems] = <span class="f">useState</span>([]);
+
+<span class="c">// Just compute it. It cannot go stale.</span>
+<span class="k">const</span> total = items.<span class="f">reduce</span>(
+  (sum, i) <span class="k">=></span> sum + i.price, <span class="n">0</span>
+);</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- EFFECTS ---------- -->
+      <section class="section" id="effects">
+        <div class="section__head">
+          <span class="section__num">04</span>
+          <h2 class="section__title">Rendering and Effects</h2>
+        </div>
+        <p class="lede">
+          Understanding when your function body runs removes most React
+          confusion. A component function is called again on every render, and
+          that happens more often than you would expect.
+        </p>
+
+        <h3 class="h3">The render cycle</h3>
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 900 190" class="diagram" role="img" aria-label="React render cycle">
+              <rect x="14" y="60" width="150" height="60" rx="8" class="dg-box" />
+              <text x="89" y="86" class="dg-text dg-text--sm">Trigger</text>
+              <text x="89" y="106" class="dg-text dg-text--xs">state or props change</text>
+
+              <path d="M170 90 L206 90" class="dg-line dg-line--arrow" />
+              <path d="M199 84 L208 90 L199 96" class="dg-line dg-line--arrow" />
+
+              <rect x="212" y="60" width="150" height="60" rx="8" class="dg-box dg-box--primary" />
+              <text x="287" y="86" class="dg-text dg-text--inv dg-text--sm">Render</text>
+              <text x="287" y="106" class="dg-text dg-text--invxs">function body runs</text>
+
+              <path d="M368 90 L404 90" class="dg-line dg-line--arrow" />
+              <path d="M397 84 L406 90 L397 96" class="dg-line dg-line--arrow" />
+
+              <rect x="410" y="60" width="150" height="60" rx="8" class="dg-box" />
+              <text x="485" y="86" class="dg-text dg-text--sm">Reconcile</text>
+              <text x="485" y="106" class="dg-text dg-text--xs">diff against previous</text>
+
+              <path d="M566 90 L602 90" class="dg-line dg-line--arrow" />
+              <path d="M595 84 L604 90 L595 96" class="dg-line dg-line--arrow" />
+
+              <rect x="608" y="60" width="150" height="60" rx="8" class="dg-box" />
+              <text x="683" y="86" class="dg-text dg-text--sm">Commit</text>
+              <text x="683" y="106" class="dg-text dg-text--xs">minimal DOM writes</text>
+
+              <path d="M764 90 L800 90" class="dg-line dg-line--arrow" />
+              <path d="M793 84 L802 90 L793 96" class="dg-line dg-line--arrow" />
+
+              <rect x="806" y="60" width="86" height="60" rx="8" class="dg-box dg-box--soft" />
+              <text x="849" y="86" class="dg-text dg-text--sm">Effects</text>
+              <text x="849" y="106" class="dg-text dg-text--xs">run after</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 3. React re-runs the function, compares the returned
+            description to the previous one, and writes only the differences to
+            the DOM.
+          </p>
+        </div>
+
+        <div class="callout">
+          <span class="callout__label">Key point</span>
+          <p>
+            Re-render does not mean the DOM is rebuilt. It means your function is
+            called again. React then compares and touches the DOM as little as
+            possible. That is why re-rendering is cheap and why you should not
+            fight it.
+          </p>
+        </div>
+
+        <h3 class="h3">useEffect: escaping to the outside world</h3>
+        <p class="body">
+          Render must be pure, so anything that reaches outside React goes in an
+          effect: network calls, subscriptions, timers, direct DOM measurement,
+          logging. Effects run after the DOM has been updated.
+        </p>
+
+        <pre class="code"><code><span class="f">useEffect</span>(() <span class="k">=></span> {
+  <span class="c">// 1. The effect body: runs after render is committed</span>
+  <span class="k">const</span> socket = <span class="f">connectToOrderFeed</span>(orderId);
+  socket.<span class="f">on</span>(<span class="s">'update'</span>, setOrder);
+
+  <span class="c">// 2. The cleanup: runs before the next effect and on unmount</span>
+  <span class="k">return</span> () <span class="k">=></span> socket.<span class="f">close</span>();
+
+<span class="c">// 3. The dependency array: re-run only when these values change</span>
+}, [orderId]);</code></pre>
+
+        <div class="maptable maptable--two">
+          <div class="maptable__row maptable__row--head">
+            <span>Dependency array</span>
+            <span>When the effect runs</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>[]</code></span>
+            <span>Once after the first render only</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>[orderId]</code></span>
+            <span>After first render, then whenever <code>orderId</code> changes</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>omitted entirely</code></span>
+            <span>After every single render. Usually a bug</span>
+          </div>
+        </div>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">Most common mistake</span>
+          <p>
+            Reaching for <code>useEffect</code> to compute a value. If you find
+            yourself setting state inside an effect that depends on other state,
+            you almost certainly want a plain calculation during render instead.
+            Effects are for synchronising with systems outside React.
+          </p>
+        </div>
+
+        <h3 class="h3">Custom hooks</h3>
+        <p class="body">
+          A custom hook is a function starting with <code>use</code> that calls
+          other hooks. It is how you extract stateful logic without extracting
+          UI. This is the closest analogue to a service class.
+        </p>
+
+        <pre class="code"><code><span class="c">// Extracted once, reused everywhere. No UI inside.</span>
+<span class="k">function</span> <span class="f">useDebounced</span>&lt;<span class="ty">T</span>&gt;(value: <span class="ty">T</span>, delayMs: <span class="ty">number</span>): <span class="ty">T</span> {
+  <span class="k">const</span> [debounced, setDebounced] = <span class="f">useState</span>(value);
+
+  <span class="f">useEffect</span>(() <span class="k">=></span> {
+    <span class="k">const</span> timer = <span class="f">setTimeout</span>(() <span class="k">=></span> <span class="f">setDebounced</span>(value), delayMs);
+    <span class="k">return</span> () <span class="k">=></span> <span class="f">clearTimeout</span>(timer);
+  }, [value, delayMs]);
+
+  <span class="k">return</span> debounced;
+}
+
+<span class="c">// Consumer stays clean</span>
+<span class="k">function</span> <span class="f">OrderSearch</span>() {
+  <span class="k">const</span> [query, setQuery] = <span class="f">useState</span>(<span class="s">''</span>);
+  <span class="k">const</span> debouncedQuery = <span class="f">useDebounced</span>(query, <span class="n">300</span>);
+
+  <span class="k">const</span> { data } = <span class="f">useOrders</span>({ search: debouncedQuery });
+  <span class="c">// ...</span>
+}</code></pre>
+      </section>
+
+      <!-- ---------- EVENTS ---------- -->
+      <section class="section" id="events">
+        <div class="section__head">
+          <span class="section__num">05</span>
+          <h2 class="section__title">Event Handling</h2>
+        </div>
+        <p class="lede">
+          Events in React look like inline HTML handlers but behave like properly
+          scoped JavaScript. You attach a function reference, not a string.
+        </p>
+
+        <pre class="code"><code><span class="c">// Pass the function. Do not call it.</span>
+&lt;<span class="t">button</span> <span class="a">onClick</span>={handleSave}&gt;Save&lt;/<span class="t">button</span>&gt;        <span class="c">// correct</span>
+&lt;<span class="t">button</span> <span class="a">onClick</span>={<span class="f">handleSave</span>()}&gt;Save&lt;/<span class="t">button</span>&gt;      <span class="c">// runs during render</span>
+
+<span class="c">// Need to pass an argument? Wrap it in an arrow function.</span>
+&lt;<span class="t">button</span> <span class="a">onClick</span>={() <span class="k">=></span> <span class="f">handleDelete</span>(order.id)}&gt;Delete&lt;/<span class="t">button</span>&gt;
+
+<span class="c">// Forms: prevent the browser's default full page reload.</span>
+<span class="k">function</span> <span class="f">handleSubmit</span>(event) {
+  event.<span class="f">preventDefault</span>();
+  <span class="f">submitOrder</span>(formValues);
+}
+
+&lt;<span class="t">form</span> <span class="a">onSubmit</span>={handleSubmit}&gt; ... &lt;/<span class="t">form</span>&gt;</code></pre>
+
+        <div class="grid3">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">Synthetic events</h4>
+            <p class="card__desc">
+              React wraps the native event in its own object with a consistent
+              API across browsers. <code>event.target</code> and
+              <code>preventDefault()</code> work exactly as you expect.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">Handlers are props</h4>
+            <p class="card__desc">
+              <code>onClick</code> on your own component is just a prop named
+              <code>onClick</code>. There is nothing special about it until you
+              forward it to a real DOM element.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Naming convention</h4>
+            <p class="card__desc">
+              Prop is <code>onSomething</code>, the function passed to it is
+              <code>handleSomething</code>. Consistent naming makes the direction
+              of the call obvious at a glance.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- PAGE ---------- -->
+      <section class="section" id="page">
+        <div class="section__head">
+          <span class="section__num">06</span>
+          <h2 class="section__title">How a Page is Built</h2>
+        </div>
+        <p class="lede">
+          A page is a component that a router renders for a given URL. It is
+          responsible for fetching what it needs and arranging smaller components
+          into a layout. It should contain very little logic of its own.
+        </p>
+
+        <h3 class="h3">From URL to rendered screen</h3>
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 900 240" class="diagram" role="img" aria-label="URL to rendered page pipeline">
+              <rect x="20" y="20" width="180" height="52" rx="6" class="dg-box dg-box--soft" />
+              <text x="110" y="43" class="dg-text dg-text--xs">URL</text>
+              <text x="110" y="61" class="dg-text dg-text--mono">/orders/8821</text>
+
+              <path d="M206 46 L246 46" class="dg-line dg-line--arrow" />
+              <path d="M239 40 L248 46 L239 52" class="dg-line dg-line--arrow" />
+
+              <rect x="252" y="20" width="180" height="52" rx="6" class="dg-box" />
+              <text x="342" y="43" class="dg-text dg-text--xs">Router matches</text>
+              <text x="342" y="61" class="dg-text dg-text--mono">/orders/:id</text>
+
+              <path d="M438 46 L478 46" class="dg-line dg-line--arrow" />
+              <path d="M471 40 L480 46 L471 52" class="dg-line dg-line--arrow" />
+
+              <rect x="484" y="20" width="180" height="52" rx="6" class="dg-box dg-box--primary" />
+              <text x="574" y="43" class="dg-text dg-text--invxs">Page component</text>
+              <text x="574" y="61" class="dg-text dg-text--monoinv">OrderDetailPage</text>
+
+              <path d="M574 72 L574 104" class="dg-line dg-line--arrow" />
+              <path d="M567 96 L574 106 L581 96" class="dg-line dg-line--arrow" />
+
+              <rect x="484" y="106" width="180" height="52" rx="6" class="dg-box" />
+              <text x="574" y="129" class="dg-text dg-text--xs">Hook fetches data</text>
+              <text x="574" y="147" class="dg-text dg-text--mono">useOrder(id)</text>
+
+              <path d="M574 158 L574 184" class="dg-line dg-line--arrow" />
+              <path d="M567 176 L574 186 L581 176" class="dg-line dg-line--arrow" />
+
+              <rect x="380" y="186" width="390" height="46" rx="6" class="dg-box dg-box--soft" />
+              <text x="575" y="214" class="dg-text dg-text--sm">Layout + presentational components render</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 4. The page is the only layer that knows about the route and
+            the data source. Everything below it receives props.
+          </p>
+        </div>
+
+        <h3 class="h3">A realistic page component</h3>
+        <pre class="code"><code><span class="k">import</span> { useParams } <span class="k">from</span> <span class="s">'react-router-dom'</span>;
+<span class="k">import</span> { Stack, Alert, Skeleton } <span class="k">from</span> <span class="s">'@mui/material'</span>;
+<span class="k">import</span> { useOrder } <span class="k">from</span> <span class="s">'@/features/orders/hooks/useOrder'</span>;
+<span class="k">import</span> { OrderSummary } <span class="k">from</span> <span class="s">'@/features/orders/components/OrderSummary'</span>;
+<span class="k">import</span> { OrderTimeline } <span class="k">from</span> <span class="s">'@/features/orders/components/OrderTimeline'</span>;
+<span class="k">import</span> { PageHeader } <span class="k">from</span> <span class="s">'@/components/PageHeader'</span>;
+
+<span class="k">export function</span> <span class="f">OrderDetailPage</span>() {
+  <span class="k">const</span> { id } = <span class="f">useParams</span>();
+  <span class="k">const</span> { data: order, isLoading, error } = <span class="f">useOrder</span>(id);
+
+  <span class="c">// Guard clauses first. Same instinct as early returns in a handler.</span>
+  <span class="k">if</span> (isLoading) <span class="k">return</span> &lt;<span class="t">Skeleton</span> <span class="a">variant</span>=<span class="s">"rectangular"</span> <span class="a">height</span>={<span class="n">320</span>} /&gt;;
+  <span class="k">if</span> (error) <span class="k">return</span> &lt;<span class="t">Alert</span> <span class="a">severity</span>=<span class="s">"error"</span>&gt;{error.message}&lt;/<span class="t">Alert</span>&gt;;
+  <span class="k">if</span> (!order) <span class="k">return</span> &lt;<span class="t">Alert</span> <span class="a">severity</span>=<span class="s">"info"</span>&gt;Order not found&lt;/<span class="t">Alert</span>&gt;;
+
+  <span class="c">// Happy path: arrange components, pass data down.</span>
+  <span class="k">return</span> (
+    &lt;<span class="t">Stack</span> <span class="a">spacing</span>={<span class="n">3</span>}&gt;
+      &lt;<span class="t">PageHeader</span>
+        <span class="a">title</span>={<span class="s">`Order </span>${order.reference}<span class="s">`</span>}
+        <span class="a">status</span>={order.status}
+      /&gt;
+      &lt;<span class="t">OrderSummary</span> <span class="a">order</span>={order} /&gt;
+      &lt;<span class="t">OrderTimeline</span> <span class="a">events</span>={order.events} /&gt;
+    &lt;/<span class="t">Stack</span>&gt;
+  );
+}</code></pre>
+
+        <h3 class="h3">Three kinds of component</h3>
+        <div class="grid3">
+          <div class="card">
+            <span class="tag tag--blue">Page</span>
+            <h4 class="card__title">Route level</h4>
+            <p class="card__desc">
+              Reads route params, calls data hooks, handles loading and error
+              branches, composes the layout. One per route.
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag tag--green">Feature</span>
+            <h4 class="card__title">Domain aware</h4>
+            <p class="card__desc">
+              Knows what an order is. Lives in the feature folder. Reusable
+              within that feature but not outside it.
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag tag--yellow">Common</span>
+            <h4 class="card__title">Domain agnostic</h4>
+            <p class="card__desc">
+              A button, a data table, an empty state. Knows nothing about orders
+              or users. This is what lives in Storybook.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- STATE MANAGEMENT ---------- -->
+      <section class="section" id="state-mgmt">
+        <div class="section__head">
+          <span class="section__num">07</span>
+          <h2 class="section__title">State Management</h2>
+        </div>
+        <p class="lede">
+          Not all state is the same. Choosing where a piece of state lives is the
+          main architectural decision you make on the frontend, and getting it
+          wrong is the main source of tangled code.
+        </p>
+
+        <h3 class="h3">Four categories</h3>
+        <div class="grid2">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">Local UI state</h4>
+            <p class="card__desc">
+              Is this dropdown open, what is typed in this input, which tab is
+              active. Owned by one component, dies with it.
+            </p>
+            <p class="card__tool"><code>useState</code></p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">Shared UI state</h4>
+            <p class="card__desc">
+              Theme, current user, sidebar collapsed. Needed in many places, does
+              not come from the server, changes rarely.
+            </p>
+            <p class="card__tool"><code>Context</code> or a store</p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Server state</h4>
+            <p class="card__desc">
+              A copy of data that lives in your database. It can go stale, needs
+              refetching, caching, and loading states. It is not really your
+              state.
+            </p>
+            <p class="card__tool"><code>React Query</code> or similar</p>
+          </div>
+          <div class="card">
+            <span class="card__num">04</span>
+            <h4 class="card__title">Form state</h4>
+            <p class="card__desc">
+              Field values, validation errors, dirty and touched flags,
+              submission status. Distinct enough to deserve its own library.
+            </p>
+            <p class="card__tool"><code>React Hook Form</code></p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <span class="callout__label">Rule of thumb</span>
+          <p>
+            Start with <code>useState</code> in the component that needs it. Move
+            it up only when a sibling needs the same value. Reach for Context or
+            a store only when passing props through more than about three levels
+            becomes noise. Most teams reach for global state far too early.
+          </p>
+        </div>
+
+        <h3 class="h3">Lifting state up</h3>
+        <p class="body">
+          When two components need the same value, move that value to their
+          closest common parent and pass it down to both.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 900 250" class="diagram" role="img" aria-label="Lifting state to a common parent">
+              <text x="200" y="20" class="dg-label">Before: duplicated, drifts apart</text>
+              <rect x="120" y="34" width="160" height="42" rx="6" class="dg-box dg-box--soft" />
+              <text x="200" y="61" class="dg-text dg-text--sm">FilterPanel</text>
+              <path d="M200 76 L200 96 M120 96 L280 96 M120 96 L120 116 M280 96 L280 116" class="dg-line" />
+              <rect x="46" y="116" width="148" height="44" rx="6" class="dg-box dg-box--dashed" />
+              <text x="120" y="137" class="dg-text dg-text--xs">SearchBox</text>
+              <text x="120" y="152" class="dg-text dg-text--mono">query</text>
+              <rect x="206" y="116" width="148" height="44" rx="6" class="dg-box dg-box--dashed" />
+              <text x="280" y="137" class="dg-text dg-text--xs">ResultList</text>
+              <text x="280" y="152" class="dg-text dg-text--mono">query</text>
+
+              <path d="M420 100 L470 100" class="dg-line dg-line--arrow" />
+              <path d="M463 94 L472 100 L463 106" class="dg-line dg-line--arrow" />
+
+              <text x="700" y="20" class="dg-label">After: one owner, passed down</text>
+              <rect x="620" y="34" width="160" height="42" rx="6" class="dg-box dg-box--primary" />
+              <text x="700" y="61" class="dg-text dg-text--inv dg-text--sm">FilterPanel · query</text>
+              <path d="M700 76 L700 96 M620 96 L780 96 M620 96 L620 116 M780 96 L780 116" class="dg-line" />
+              <rect x="546" y="116" width="148" height="44" rx="6" class="dg-box" />
+              <text x="620" y="137" class="dg-text dg-text--xs">SearchBox</text>
+              <text x="620" y="152" class="dg-text dg-text--mono">via props</text>
+              <rect x="706" y="116" width="148" height="44" rx="6" class="dg-box" />
+              <text x="780" y="137" class="dg-text dg-text--xs">ResultList</text>
+              <text x="780" y="152" class="dg-text dg-text--mono">via props</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 5. Two copies of the same value will eventually disagree. One
+            owner, many readers.
+          </p>
+        </div>
+
+        <h3 class="h3">Context for genuinely global values</h3>
+        <pre class="code"><code><span class="c">// 1. Create the context with a typed default.</span>
+<span class="k">interface</span> <span class="ty">AuthContextValue</span> {
+  user: <span class="ty">User</span> | <span class="ty">null</span>;
+  <span class="f">signOut</span>: () <span class="k">=></span> <span class="ty">void</span>;
+}
+
+<span class="k">const</span> AuthContext = <span class="f">createContext</span>&lt;<span class="ty">AuthContextValue</span> | <span class="ty">undefined</span>&gt;(<span class="k">undefined</span>);
+
+<span class="c">// 2. Provide it near the root of the tree.</span>
+<span class="k">export function</span> <span class="f">AuthProvider</span>({ children }: { children: <span class="ty">ReactNode</span> }) {
+  <span class="k">const</span> [user, setUser] = <span class="f">useState</span>&lt;<span class="ty">User</span> | <span class="ty">null</span>&gt;(<span class="k">null</span>);
+  <span class="k">const</span> signOut = () <span class="k">=></span> <span class="f">setUser</span>(<span class="k">null</span>);
+
+  <span class="k">return</span> (
+    &lt;<span class="t">AuthContext.Provider</span> <span class="a">value</span>={{ user, signOut }}&gt;
+      {children}
+    &lt;/<span class="t">AuthContext.Provider</span>&gt;
+  );
+}
+
+<span class="c">// 3. Consume through a custom hook that fails loudly if misused.</span>
+<span class="k">export function</span> <span class="f">useAuth</span>() {
+  <span class="k">const</span> ctx = <span class="f">useContext</span>(AuthContext);
+  <span class="k">if</span> (!ctx) <span class="k">throw new</span> <span class="f">Error</span>(<span class="s">'useAuth must be used inside AuthProvider'</span>);
+  <span class="k">return</span> ctx;
+}</code></pre>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">Context is not a database</span>
+          <p>
+            Every component consuming a context re-renders when its value
+            changes. Do not put fast changing data like a text input value in a
+            context that wraps the whole app. Use it for values that change
+            rarely: the signed in user, the theme, feature flags.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- DATA FETCHING ---------- -->
+      <section class="section" id="data">
+        <div class="section__head">
+          <span class="section__num">08</span>
+          <h2 class="section__title">Data Fetching</h2>
+        </div>
+        <p class="lede">
+          You know the request and response side already. What is new is that the
+          answer arrives after the screen has already rendered, so every fetch
+          has at least three visual states you must design for.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 900 200" class="diagram" role="img" aria-label="Three states of a request">
+              <rect x="30" y="30" width="240" height="130" rx="8" class="dg-box dg-box--soft" />
+              <text x="150" y="62" class="dg-text dg-text--sm">Loading</text>
+              <rect x="66" y="80" width="168" height="10" rx="5" class="dg-skel" />
+              <rect x="66" y="100" width="130" height="10" rx="5" class="dg-skel" />
+              <rect x="66" y="120" width="150" height="10" rx="5" class="dg-skel" />
+
+              <rect x="330" y="30" width="240" height="130" rx="8" class="dg-box" />
+              <text x="450" y="62" class="dg-text dg-text--sm">Error</text>
+              <rect x="366" y="80" width="168" height="46" rx="5" class="dg-err" />
+              <text x="450" y="108" class="dg-text dg-text--errsm">Request failed</text>
+
+              <rect x="630" y="30" width="240" height="130" rx="8" class="dg-box dg-box--primary" />
+              <text x="750" y="62" class="dg-text dg-text--inv dg-text--sm">Success</text>
+              <rect x="666" y="80" width="168" height="10" rx="5" class="dg-skel dg-skel--inv" />
+              <rect x="666" y="100" width="140" height="10" rx="5" class="dg-skel dg-skel--inv" />
+              <rect x="666" y="120" width="160" height="10" rx="5" class="dg-skel dg-skel--inv" />
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 6. Every screen that talks to an API needs all three. Missing
+            the loading state is the most common frontend review comment.
+          </p>
+        </div>
+
+        <h3 class="h3">The manual version</h3>
+        <p class="body">
+          Worth seeing once so the library version is not magic. Note the
+          cancellation guard: if the component unmounts or the id changes
+          mid flight, you must not write the stale response into state.
+        </p>
+
+        <pre class="code"><code><span class="k">function</span> <span class="f">useOrderManual</span>(id: <span class="ty">string</span>) {
+  <span class="k">const</span> [data, setData] = <span class="f">useState</span>&lt;<span class="ty">Order</span> | <span class="ty">null</span>&gt;(<span class="k">null</span>);
+  <span class="k">const</span> [isLoading, setIsLoading] = <span class="f">useState</span>(<span class="k">true</span>);
+  <span class="k">const</span> [error, setError] = <span class="f">useState</span>&lt;<span class="ty">Error</span> | <span class="ty">null</span>&gt;(<span class="k">null</span>);
+
+  <span class="f">useEffect</span>(() <span class="k">=></span> {
+    <span class="k">let</span> cancelled = <span class="k">false</span>;
+    <span class="f">setIsLoading</span>(<span class="k">true</span>);
+
+    <span class="f">fetch</span>(<span class="s">`/api/orders/</span>${id}<span class="s">`</span>)
+      .<span class="f">then</span>((res) <span class="k">=></span> {
+        <span class="k">if</span> (!res.ok) <span class="k">throw new</span> <span class="f">Error</span>(<span class="s">`HTTP </span>${res.status}<span class="s">`</span>);
+        <span class="k">return</span> res.<span class="f">json</span>();
+      })
+      .<span class="f">then</span>((json) <span class="k">=></span> { <span class="k">if</span> (!cancelled) <span class="f">setData</span>(json); })
+      .<span class="f">catch</span>((err) <span class="k">=></span> { <span class="k">if</span> (!cancelled) <span class="f">setError</span>(err); })
+      .<span class="f">finally</span>(() <span class="k">=></span> { <span class="k">if</span> (!cancelled) <span class="f">setIsLoading</span>(<span class="k">false</span>); });
+
+    <span class="c">// Cleanup guards against writing a stale response.</span>
+    <span class="k">return</span> () <span class="k">=></span> { cancelled = <span class="k">true</span>; };
+  }, [id]);
+
+  <span class="k">return</span> { data, isLoading, error };
+}</code></pre>
+
+        <h3 class="h3">What a data library gives you</h3>
+        <p class="body">
+          The manual version is correct but incomplete. It has no caching, no
+          deduplication, no retry, no refetch on window focus, and no way for two
+          components to share one request. That is what React Query handles.
+        </p>
+
+        <pre class="code"><code><span class="k">import</span> { useQuery } <span class="k">from</span> <span class="s">'@tanstack/react-query'</span>;
+
+<span class="k">export function</span> <span class="f">useOrder</span>(id: <span class="ty">string</span>) {
+  <span class="k">return</span> <span class="f">useQuery</span>({
+    queryKey: [<span class="s">'order'</span>, id],           <span class="c">// cache identity</span>
+    queryFn: () <span class="k">=></span> <span class="f">fetchOrder</span>(id),      <span class="c">// how to get it</span>
+    staleTime: <span class="n">30_000</span>,                <span class="c">// treat as fresh for 30s</span>
+  });
+}
+
+<span class="c">// Two components, one network request. The cache deduplicates.</span>
+<span class="k">function</span> <span class="f">Summary</span>({ id }) { <span class="k">const</span> { data } = <span class="f">useOrder</span>(id); <span class="c">/* ... */</span> }
+<span class="k">function</span> <span class="f">Sidebar</span>({ id }) { <span class="k">const</span> { data } = <span class="f">useOrder</span>(id); <span class="c">/* ... */</span> }</code></pre>
+
+        <h3 class="h3">Typing the boundary</h3>
+        <div class="callout callout--warn">
+          <span class="callout__label">Important</span>
+          <p>
+            TypeScript does not validate anything at runtime. Annotating a
+            response as <code>Order</code> is a promise you are making to the
+            compiler, not a check. If the API changes shape, the types will still
+            say everything is fine while the app breaks.
+          </p>
+        </div>
+
+        <pre class="code"><code><span class="c">// This is an assertion, not a validation. It is a lie if the API changed.</span>
+<span class="k">const</span> order = <span class="k">await</span> res.<span class="f">json</span>() <span class="k">as</span> <span class="ty">Order</span>;
+
+<span class="c">// Validate at the boundary if the contract is not fully under your control.</span>
+<span class="k">import</span> { z } <span class="k">from</span> <span class="s">'zod'</span>;
+
+<span class="k">const</span> OrderSchema = z.<span class="f">object</span>({
+  id: z.<span class="f">string</span>(),
+  reference: z.<span class="f">string</span>(),
+  status: z.<span class="f">enum</span>([<span class="s">'open'</span>, <span class="s">'closed'</span>, <span class="s">'cancelled'</span>]),
+  total: z.<span class="f">number</span>(),
+});
+
+<span class="k">type</span> <span class="ty">Order</span> = z.infer&lt;<span class="k">typeof</span> OrderSchema&gt;;   <span class="c">// type derived from schema</span>
+
+<span class="k">export async function</span> <span class="f">fetchOrder</span>(id: <span class="ty">string</span>): <span class="ty">Promise</span>&lt;<span class="ty">Order</span>&gt; {
+  <span class="k">const</span> res = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">`/api/orders/</span>${id}<span class="s">`</span>);
+  <span class="k">if</span> (!res.ok) <span class="k">throw new</span> <span class="f">Error</span>(<span class="s">`Failed to load order </span>${id}<span class="s">`</span>);
+  <span class="k">return</span> OrderSchema.<span class="f">parse</span>(<span class="k">await</span> res.<span class="f">json</span>());  <span class="c">// throws on mismatch</span>
+}</code></pre>
+      </section>
+
+      <!-- ---------- TS BASICS ---------- -->
+      <section class="section" id="ts-basics">
+        <div class="section__head">
+          <span class="section__num">09</span>
+          <h2 class="section__title">TypeScript Basics</h2>
+        </div>
+        <p class="lede">
+          TypeScript is JavaScript with a type checker bolted on at build time.
+          Every type annotation is erased before the code runs. Nothing you write
+          in types exists in the browser.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 880 130" class="diagram" role="img" aria-label="TypeScript compilation and erasure">
+              <rect x="20" y="34" width="200" height="58" rx="8" class="dg-box dg-box--primary" />
+              <text x="120" y="59" class="dg-text dg-text--invxs">You write</text>
+              <text x="120" y="79" class="dg-text dg-text--monoinv">order.ts</text>
+
+              <path d="M226 63 L272 63" class="dg-line dg-line--arrow" />
+              <path d="M265 57 L274 63 L265 69" class="dg-line dg-line--arrow" />
+              <text x="250" y="46" class="dg-label">tsc / esbuild</text>
+
+              <rect x="280" y="34" width="220" height="58" rx="8" class="dg-box" />
+              <text x="390" y="59" class="dg-text dg-text--xs">Types checked, then erased</text>
+              <text x="390" y="79" class="dg-text dg-text--mono">no runtime cost</text>
+
+              <path d="M506 63 L552 63" class="dg-line dg-line--arrow" />
+              <path d="M545 57 L554 63 L545 69" class="dg-line dg-line--arrow" />
+
+              <rect x="560" y="34" width="200" height="58" rx="8" class="dg-box dg-box--soft" />
+              <text x="660" y="59" class="dg-text dg-text--xs">Browser runs</text>
+              <text x="660" y="79" class="dg-text dg-text--mono">order.js</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 7. Types are a development time contract. At runtime the
+            browser sees plain JavaScript.
+          </p>
+        </div>
+
+        <pre class="code"><code><span class="c">// Primitives. Usually inferred, so you rarely write these.</span>
+<span class="k">const</span> reference: <span class="ty">string</span> = <span class="s">'ORD-8821'</span>;
+<span class="k">const</span> total: <span class="ty">number</span> = <span class="n">149.9</span>;
+<span class="k">const</span> isPaid: <span class="ty">boolean</span> = <span class="k">true</span>;
+
+<span class="c">// Arrays</span>
+<span class="k">const</span> tags: <span class="ty">string</span>[] = [<span class="s">'urgent'</span>, <span class="s">'export'</span>];
+
+<span class="c">// Object shape</span>
+<span class="k">interface</span> <span class="ty">Order</span> {
+  id: <span class="ty">string</span>;
+  reference: <span class="ty">string</span>;
+  total: <span class="ty">number</span>;
+  note?: <span class="ty">string</span>;              <span class="c">// optional: string | undefined</span>
+  <span class="k">readonly</span> createdAt: <span class="ty">string</span>;   <span class="c">// cannot be reassigned</span>
+}
+
+<span class="c">// Union: one of a fixed set. Far better than a bare string.</span>
+<span class="k">type</span> <span class="ty">OrderStatus</span> = <span class="s">'open'</span> | <span class="s">'closed'</span> | <span class="s">'cancelled'</span>;
+
+<span class="c">// Function signature</span>
+<span class="k">function</span> <span class="f">applyDiscount</span>(order: <span class="ty">Order</span>, percent: <span class="ty">number</span>): <span class="ty">Order</span> {
+  <span class="k">return</span> { ...order, total: order.total * (<span class="n">1</span> - percent / <span class="n">100</span>) };
+}</code></pre>
+
+        <h3 class="h3">interface or type</h3>
+        <div class="split">
+          <div class="card">
+            <span class="tag tag--blue">interface</span>
+            <p class="card__desc">
+              For object shapes. Can be extended and merged. Slightly better
+              error messages. Use this by default for props and models.
+            </p>
+            <pre class="code code--sm"><code><span class="k">interface</span> <span class="ty">BaseEntity</span> {
+  id: <span class="ty">string</span>;
+  createdAt: <span class="ty">string</span>;
+}
+
+<span class="k">interface</span> <span class="ty">Order</span> <span class="k">extends</span> <span class="ty">BaseEntity</span> {
+  reference: <span class="ty">string</span>;
+  total: <span class="ty">number</span>;
+}</code></pre>
+          </div>
+          <div class="card">
+            <span class="tag tag--green">type</span>
+            <p class="card__desc">
+              For everything an interface cannot express: unions, intersections,
+              tuples, mapped and conditional types, aliasing a primitive.
+            </p>
+            <pre class="code code--sm"><code><span class="k">type</span> <span class="ty">Status</span> = <span class="s">'open'</span> | <span class="s">'closed'</span>;
+
+<span class="k">type</span> <span class="ty">Coord</span> = [<span class="ty">number</span>, <span class="ty">number</span>];
+
+<span class="k">type</span> <span class="ty">WithAudit</span>&lt;<span class="ty">T</span>&gt; = <span class="ty">T</span> &amp; {
+  updatedBy: <span class="ty">string</span>;
+};</code></pre>
+          </div>
+        </div>
+
+        <h3 class="h3">Narrowing</h3>
+        <p class="body">
+          A union type must be narrowed before you can use the members specific to
+          one branch. TypeScript follows normal control flow to do this, so
+          ordinary <code>if</code> checks are enough.
+        </p>
+
+        <pre class="code"><code><span class="k">type</span> <span class="ty">Result</span> =
+  | { kind: <span class="s">'success'</span>; order: <span class="ty">Order</span> }
+  | { kind: <span class="s">'failure'</span>; message: <span class="ty">string</span> };
+
+<span class="k">function</span> <span class="f">describe</span>(result: <span class="ty">Result</span>): <span class="ty">string</span> {
+  <span class="k">if</span> (result.kind === <span class="s">'failure'</span>) {
+    <span class="k">return</span> result.message;      <span class="c">// TS knows: failure branch</span>
+  }
+  <span class="k">return</span> result.order.reference; <span class="c">// TS knows: success branch</span>
+}
+
+<span class="c">// Optional values must be checked before use.</span>
+<span class="k">function</span> <span class="f">initial</span>(name?: <span class="ty">string</span>) {
+  <span class="k">if</span> (!name) <span class="k">return</span> <span class="s">'?'</span>;
+  <span class="k">return</span> name[<span class="n">0</span>].<span class="f">toUpperCase</span>();  <span class="c">// safe: name is string here</span>
+}</code></pre>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">Avoid</span>
+          <p>
+            <code>any</code> disables checking for that value and everything it
+            touches. If you genuinely do not know a type, use
+            <code>unknown</code> instead: it forces you to narrow before use,
+            which is the entire point.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- TS IN REACT ---------- -->
+      <section class="section" id="ts-react">
+        <div class="section__head">
+          <span class="section__num">10</span>
+          <h2 class="section__title">TypeScript in React</h2>
+        </div>
+        <p class="lede">
+          In practice, ninety percent of the TypeScript you write in a React
+          codebase is typing props. Get that right and the rest is mostly
+          inference.
+        </p>
+
+        <pre class="code"><code><span class="k">import</span> { <span class="k">type</span> ReactNode } <span class="k">from</span> <span class="s">'react'</span>;
+
+<span class="c">// Props interface. Convention: ComponentName + "Props".</span>
+<span class="k">interface</span> <span class="ty">OrderCardProps</span> {
+  order: <span class="ty">Order</span>;
+  variant?: <span class="s">'compact'</span> | <span class="s">'detailed'</span>;      <span class="c">// optional with union</span>
+  <span class="f">onSelect</span>?: (id: <span class="ty">string</span>) <span class="k">=></span> <span class="ty">void</span>;        <span class="c">// optional callback</span>
+  actions?: <span class="ty">ReactNode</span>;                     <span class="c">// anything renderable</span>
+}
+
+<span class="k">export function</span> <span class="f">OrderCard</span>({
+  order,
+  variant = <span class="s">'compact'</span>,                    <span class="c">// default value</span>
+  onSelect,
+  actions,
+}: <span class="ty">OrderCardProps</span>) {
+  <span class="k">return</span> (
+    &lt;<span class="t">Card</span> <span class="a">onClick</span>={() <span class="k">=></span> onSelect?.(order.id)}&gt;
+      &lt;<span class="t">Typography</span>&gt;{order.reference}&lt;/<span class="t">Typography</span>&gt;
+      {variant === <span class="s">'detailed'</span> &amp;&amp; &lt;<span class="t">OrderTotals</span> <span class="a">order</span>={order} /&gt;}
+      {actions}
+    &lt;/<span class="t">Card</span>&gt;
+  );
+}</code></pre>
+
+        <h3 class="h3">Typing hooks</h3>
+        <pre class="code"><code><span class="c">// Inferred from the initial value. No annotation needed.</span>
+<span class="k">const</span> [query, setQuery] = <span class="f">useState</span>(<span class="s">''</span>);            <span class="c">// string</span>
+<span class="k">const</span> [count, setCount] = <span class="f">useState</span>(<span class="n">0</span>);              <span class="c">// number</span>
+
+<span class="c">// Annotate when the initial value does not tell the whole story.</span>
+<span class="k">const</span> [order, setOrder] = <span class="f">useState</span>&lt;<span class="ty">Order</span> | <span class="ty">null</span>&gt;(<span class="k">null</span>);
+<span class="k">const</span> [items, setItems] = <span class="f">useState</span>&lt;<span class="ty">Order</span>[]&gt;([]);       <span class="c">// otherwise never[]</span>
+
+<span class="c">// Refs pointing at DOM nodes.</span>
+<span class="k">const</span> inputRef = <span class="f">useRef</span>&lt;<span class="ty">HTMLInputElement</span>&gt;(<span class="k">null</span>);
+
+<span class="c">// Event handlers. Let React's types do the work.</span>
+<span class="k">function</span> <span class="f">handleChange</span>(e: <span class="ty">React.ChangeEvent</span>&lt;<span class="ty">HTMLInputElement</span>&gt;) {
+  <span class="f">setQuery</span>(e.target.value);
+}
+
+<span class="k">function</span> <span class="f">handleSubmit</span>(e: <span class="ty">React.FormEvent</span>&lt;<span class="ty">HTMLFormElement</span>&gt;) {
+  e.<span class="f">preventDefault</span>();
+}</code></pre>
+
+        <h3 class="h3">Making bad states unrepresentable</h3>
+        <p class="body">
+          This is the payoff. A well designed union means the compiler rejects
+          combinations that should never exist, so you never have to write a
+          defensive check for them.
+        </p>
+
+        <div class="split">
+          <div class="card card--bad">
+            <span class="tag tag--red">Allows nonsense</span>
+            <pre class="code code--sm"><code><span class="k">interface</span> <span class="ty">Props</span> {
+  isLoading: <span class="ty">boolean</span>;
+  error?: <span class="ty">string</span>;
+  data?: <span class="ty">Order</span>;
+}
+
+<span class="c">// Nothing stops this:</span>
+&lt;<span class="t">View</span> <span class="a">isLoading</span> <span class="a">error</span>=<span class="s">"x"</span> <span class="a">data</span>={o} /&gt;</code></pre>
+          </div>
+          <div class="card card--good">
+            <span class="tag tag--green">Only valid shapes compile</span>
+            <pre class="code code--sm"><code><span class="k">type</span> <span class="ty">Props</span> =
+  | { status: <span class="s">'loading'</span> }
+  | { status: <span class="s">'error'</span>; message: <span class="ty">string</span> }
+  | { status: <span class="s">'ready'</span>; data: <span class="ty">Order</span> };
+
+<span class="c">// The compiler rejects the impossible</span>
+<span class="c">// combinations outright.</span></code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- UTILITY TYPES ---------- -->
+      <section class="section" id="ts-utility">
+        <div class="section__head">
+          <span class="section__num">11</span>
+          <h2 class="section__title">Utility Types</h2>
+        </div>
+        <p class="lede">
+          Built in helpers that derive one type from another. They keep types in
+          sync automatically, so changing the source model updates everything
+          derived from it.
+        </p>
+
+        <pre class="code"><code><span class="k">interface</span> <span class="ty">Order</span> {
+  id: <span class="ty">string</span>;
+  reference: <span class="ty">string</span>;
+  status: <span class="ty">OrderStatus</span>;
+  total: <span class="ty">number</span>;
+  customerId: <span class="ty">string</span>;
+}
+
+<span class="c">// Partial: every field optional. Ideal for PATCH payloads.</span>
+<span class="k">type</span> <span class="ty">OrderPatch</span> = <span class="ty">Partial</span>&lt;<span class="ty">Order</span>&gt;;
+
+<span class="c">// Pick: keep only what you name. Ideal for list rows.</span>
+<span class="k">type</span> <span class="ty">OrderListItem</span> = <span class="ty">Pick</span>&lt;<span class="ty">Order</span>, <span class="s">'id'</span> | <span class="s">'reference'</span> | <span class="s">'status'</span>&gt;;
+
+<span class="c">// Omit: everything except what you name. Ideal for create payloads.</span>
+<span class="k">type</span> <span class="ty">NewOrder</span> = <span class="ty">Omit</span>&lt;<span class="ty">Order</span>, <span class="s">'id'</span>&gt;;
+
+<span class="c">// Required: strip all optionality.</span>
+<span class="k">type</span> <span class="ty">CompleteOrder</span> = <span class="ty">Required</span>&lt;<span class="ty">Order</span>&gt;;
+
+<span class="c">// Record: build a lookup keyed by a union.</span>
+<span class="k">type</span> <span class="ty">StatusLabels</span> = <span class="ty">Record</span>&lt;<span class="ty">OrderStatus</span>, <span class="ty">string</span>&gt;;
+
+<span class="k">const</span> labels: <span class="ty">StatusLabels</span> = {
+  open: <span class="s">'Open'</span>,
+  closed: <span class="s">'Closed'</span>,
+  cancelled: <span class="s">'Cancelled'</span>,
+  <span class="c">// Miss one and the compiler complains. Add a status later</span>
+  <span class="c">// and every Record using it fails until you handle it.</span>
+};
+
+<span class="c">// ReturnType: derive from an existing function, no manual duplication.</span>
+<span class="k">type</span> <span class="ty">OrderQuery</span> = <span class="ty">ReturnType</span>&lt;<span class="k">typeof</span> useOrder&gt;;</code></pre>
+
+        <div class="maptable maptable--three">
+          <div class="maptable__row maptable__row--head">
+            <span>Utility</span>
+            <span>Effect</span>
+            <span>Typical use</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Partial&lt;T&gt;</code></span>
+            <span>All fields optional</span>
+            <span>Update payloads, default merging</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Required&lt;T&gt;</code></span>
+            <span>All fields mandatory</span>
+            <span>After validation or defaulting</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Pick&lt;T, K&gt;</code></span>
+            <span>Subset of fields</span>
+            <span>Lightweight list or summary views</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Omit&lt;T, K&gt;</code></span>
+            <span>All except named fields</span>
+            <span>Create payloads without server fields</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Record&lt;K, V&gt;</code></span>
+            <span>Map from key union to value</span>
+            <span>Exhaustive label or config lookups</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>ReturnType&lt;F&gt;</code></span>
+            <span>Result type of a function</span>
+            <span>Deriving hook return types</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- MUI ---------- -->
+      <section class="section" id="mui">
+        <div class="section__head">
+          <span class="section__num">12</span>
+          <h2 class="section__title">Material UI</h2>
+        </div>
+        <p class="lede">
+          MUI gives us the accessible, tested primitives so we are not
+          reimplementing dialogs and date pickers. Our job is to configure the
+          theme once and use the components consistently.
+        </p>
+
+        <pre class="code"><code><span class="k">import</span> { Button, TextField, Stack, Typography } <span class="k">from</span> <span class="s">'@mui/material'</span>;
+
+<span class="k">export function</span> <span class="f">OrderActions</span>({ onApprove, onReject, disabled }: <span class="ty">Props</span>) {
+  <span class="k">return</span> (
+    &lt;<span class="t">Stack</span> <span class="a">direction</span>=<span class="s">"row"</span> <span class="a">spacing</span>={<span class="n">2</span>} <span class="a">alignItems</span>=<span class="s">"center"</span>&gt;
+      &lt;<span class="t">Button</span> <span class="a">variant</span>=<span class="s">"contained"</span> <span class="a">onClick</span>={onApprove} <span class="a">disabled</span>={disabled}&gt;
+        Approve
+      &lt;/<span class="t">Button</span>&gt;
+      &lt;<span class="t">Button</span> <span class="a">variant</span>=<span class="s">"outlined"</span> <span class="a">color</span>=<span class="s">"error"</span> <span class="a">onClick</span>={onReject}&gt;
+        Reject
+      &lt;/<span class="t">Button</span>&gt;
+    &lt;/<span class="t">Stack</span>&gt;
+  );
+}</code></pre>
+
+        <h3 class="h3">Theme over one off styling</h3>
+        <p class="body">
+          Set design decisions in the theme, not in individual components. When
+          the brand colour changes you edit one file, not two hundred.
+        </p>
+
+        <pre class="code"><code><span class="k">import</span> { createTheme, ThemeProvider } <span class="k">from</span> <span class="s">'@mui/material/styles'</span>;
+
+<span class="k">export const</span> theme = <span class="f">createTheme</span>({
+  palette: {
+    primary:   { main: <span class="s">'#141B4D'</span> },
+    secondary: { main: <span class="s">'#5A6398'</span> },
+  },
+  shape: { borderRadius: <span class="n">6</span> },
+  typography: {
+    fontFamily: <span class="s">'"Newsreader", Georgia, serif'</span>,
+    button: { textTransform: <span class="s">'none'</span> },   <span class="c">// no shouting</span>
+  },
+  components: {
+    MuiButton: {
+      defaultProps: { disableElevation: <span class="k">true</span> },
+    },
+  },
+});
+
+<span class="c">// Wrap the app once.</span>
+&lt;<span class="t">ThemeProvider</span> <span class="a">theme</span>={theme}&gt;&lt;<span class="t">App</span> /&gt;&lt;/<span class="t">ThemeProvider</span>&gt;</code></pre>
+
+        <h3 class="h3">The sx prop</h3>
+        <pre class="code"><code><span class="c">// Prefer theme tokens over hardcoded values.</span>
+&lt;<span class="t">Box</span>
+  <span class="a">sx</span>={{
+    p: <span class="n">3</span>,                              <span class="c">// 3 × 8px spacing unit</span>
+    borderRadius: <span class="n">1</span>,
+    bgcolor: <span class="s">'background.paper'</span>,       <span class="c">// token, not '#fff'</span>
+    borderColor: <span class="s">'divider'</span>,
+    display: { xs: <span class="s">'block'</span>, md: <span class="s">'flex'</span> },  <span class="c">// responsive</span>
+  }}
+&gt;</code></pre>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">Team convention</span>
+          <p>
+            Use <code>sx</code> for layout adjustments local to one usage. If you
+            are writing the same <code>sx</code> block in more than two places,
+            that is a component in our common library, not a copy paste.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- FORMS ---------- -->
+      <section class="section" id="forms">
+        <div class="section__head">
+          <span class="section__num">13</span>
+          <h2 class="section__title">React Hook Form</h2>
+        </div>
+        <p class="lede">
+          Forms are the one place where the plain React approach genuinely does
+          not scale. React Hook Form keeps field values out of React state, so
+          typing in one field does not re-render the entire form.
+        </p>
+
+        <div class="split">
+          <div class="card card--bad">
+            <span class="tag tag--red">Hand rolled, twelve fields</span>
+            <pre class="code code--sm"><code><span class="k">const</span> [values, setValues] = <span class="f">useState</span>({...});
+<span class="k">const</span> [errors, setErrors] = <span class="f">useState</span>({});
+<span class="k">const</span> [touched, setTouched] = <span class="f">useState</span>({});
+<span class="k">const</span> [submitting, setSubmitting] = <span class="f">useState</span>(<span class="k">false</span>);
+
+<span class="c">// Every keystroke re-renders all twelve fields.</span>
+<span class="c">// Validation logic scattered across handlers.</span></code></pre>
+          </div>
+          <div class="card card--good">
+            <span class="tag tag--green">React Hook Form</span>
+            <pre class="code code--sm"><code><span class="k">const</span> {
+  register, handleSubmit, formState
+} = <span class="f">useForm</span>&lt;<span class="ty">OrderForm</span>&gt;();
+
+<span class="c">// Values live in refs, not state.</span>
+<span class="c">// Only the changed field re-renders.</span></code></pre>
+          </div>
+        </div>
+
+        <h3 class="h3">A typed form end to end</h3>
+        <pre class="code"><code><span class="k">import</span> { useForm } <span class="k">from</span> <span class="s">'react-hook-form'</span>;
+<span class="k">import</span> { zodResolver } <span class="k">from</span> <span class="s">'@hookform/resolvers/zod'</span>;
+<span class="k">import</span> { z } <span class="k">from</span> <span class="s">'zod'</span>;
+<span class="k">import</span> { TextField, Button, Stack } <span class="k">from</span> <span class="s">'@mui/material'</span>;
+
+<span class="c">// 1. Schema is the single source of truth for shape and rules.</span>
+<span class="k">const</span> schema = z.<span class="f">object</span>({
+  reference: z.<span class="f">string</span>().<span class="f">min</span>(<span class="n">3</span>, <span class="s">'At least 3 characters'</span>),
+  quantity:  z.<span class="f">coerce</span>.<span class="f">number</span>().<span class="f">int</span>().<span class="f">positive</span>(<span class="s">'Must be greater than 0'</span>),
+  email:     z.<span class="f">string</span>().<span class="f">email</span>(<span class="s">'Enter a valid email'</span>),
+});
+
+<span class="c">// 2. Type is derived, never written twice.</span>
+<span class="k">type</span> <span class="ty">OrderForm</span> = z.infer&lt;<span class="k">typeof</span> schema&gt;;
+
+<span class="k">export function</span> <span class="f">CreateOrderForm</span>({ onCreated }: <span class="ty">Props</span>) {
+  <span class="k">const</span> {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = <span class="f">useForm</span>&lt;<span class="ty">OrderForm</span>&gt;({
+    resolver: <span class="f">zodResolver</span>(schema),
+    defaultValues: { reference: <span class="s">''</span>, quantity: <span class="n">1</span>, email: <span class="s">''</span> },
+  });
+
+  <span class="c">// 3. onSubmit only runs if validation passed. Values are typed.</span>
+  <span class="k">const</span> onSubmit = <span class="k">async</span> (values: <span class="ty">OrderForm</span>) <span class="k">=></span> {
+    <span class="k">const</span> created = <span class="k">await</span> <span class="f">createOrder</span>(values);
+    <span class="f">onCreated</span>(created);
+  };
+
+  <span class="k">return</span> (
+    &lt;<span class="t">form</span> <span class="a">onSubmit</span>={<span class="f">handleSubmit</span>(onSubmit)} <span class="a">noValidate</span>&gt;
+      &lt;<span class="t">Stack</span> <span class="a">spacing</span>={<span class="n">2</span>}&gt;
+        &lt;<span class="t">TextField</span>
+          <span class="a">label</span>=<span class="s">"Reference"</span>
+          {...<span class="f">register</span>(<span class="s">'reference'</span>)}
+          <span class="a">error</span>={!!errors.reference}
+          <span class="a">helperText</span>={errors.reference?.message}
+        /&gt;
+        &lt;<span class="t">TextField</span>
+          <span class="a">label</span>=<span class="s">"Quantity"</span>
+          <span class="a">type</span>=<span class="s">"number"</span>
+          {...<span class="f">register</span>(<span class="s">'quantity'</span>)}
+          <span class="a">error</span>={!!errors.quantity}
+          <span class="a">helperText</span>={errors.quantity?.message}
+        /&gt;
+        &lt;<span class="t">Button</span> <span class="a">type</span>=<span class="s">"submit"</span> <span class="a">variant</span>=<span class="s">"contained"</span> <span class="a">disabled</span>={isSubmitting}&gt;
+          {isSubmitting ? <span class="s">'Creating...'</span> : <span class="s">'Create order'</span>}
+        &lt;/<span class="t">Button</span>&gt;
+      &lt;/<span class="t">Stack</span>&gt;
+    &lt;/<span class="t">form</span>&gt;
+  );
+}</code></pre>
+
+        <div class="callout">
+          <span class="callout__label">Controlled components</span>
+          <p>
+            <code>register</code> works with anything that forwards a ref to a
+            native input. MUI's <code>TextField</code> does. For components that
+            manage their own value internally, such as
+            <code>Select</code>, <code>DatePicker</code>, or
+            <code>Autocomplete</code>, wrap them with
+            <code>&lt;Controller /&gt;</code> instead.
+          </p>
+        </div>
+
+        <pre class="code"><code><span class="k">import</span> { Controller } <span class="k">from</span> <span class="s">'react-hook-form'</span>;
+
+&lt;<span class="t">Controller</span>
+  <span class="a">name</span>=<span class="s">"status"</span>
+  <span class="a">control</span>={control}
+  <span class="a">render</span>={({ field, fieldState }) <span class="k">=></span> (
+    &lt;<span class="t">Select</span> {...field} <span class="a">error</span>={!!fieldState.error}&gt;
+      &lt;<span class="t">MenuItem</span> <span class="a">value</span>=<span class="s">"open"</span>&gt;Open&lt;/<span class="t">MenuItem</span>&gt;
+      &lt;<span class="t">MenuItem</span> <span class="a">value</span>=<span class="s">"closed"</span>&gt;Closed&lt;/<span class="t">MenuItem</span>&gt;
+    &lt;/<span class="t">Select</span>&gt;
+  )}
+/&gt;</code></pre>
+      </section>
+
+      <!-- ---------- STORYBOOK ---------- -->
+      <section class="section" id="storybook">
+        <div class="section__head">
+          <span class="section__num">14</span>
+          <h2 class="section__title">Storybook and Common Components</h2>
+        </div>
+        <p class="lede">
+          Storybook runs components in isolation, outside the app, with no
+          routing and no backend. It is a workshop for building a component and a
+          catalogue for finding one that already exists.
+        </p>
+
+        <div class="grid3">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">Build in isolation</h4>
+            <p class="card__desc">
+              No need to log in, navigate three pages, and create test data to
+              see an error state. Render it directly with the props you want.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">Document by example</h4>
+            <p class="card__desc">
+              A story is executable documentation. It cannot go stale the way a
+              wiki page does, because it fails when the component changes.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Prevent duplication</h4>
+            <p class="card__desc">
+              Check Storybook before writing a component. The reason we have four
+              slightly different date pickers is that nobody looked first.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="h3">A story file</h3>
+        <pre class="code"><code><span class="k">import type</span> { Meta, StoryObj } <span class="k">from</span> <span class="s">'@storybook/react'</span>;
+<span class="k">import</span> { StatusBadge } <span class="k">from</span> <span class="s">'./StatusBadge'</span>;
+
+<span class="k">const</span> meta: <span class="ty">Meta</span>&lt;<span class="k">typeof</span> StatusBadge&gt; = {
+  title: <span class="s">'Common/StatusBadge'</span>,
+  component: StatusBadge,
+  args: { label: <span class="s">'Open'</span>, status: <span class="s">'open'</span> },   <span class="c">// shared defaults</span>
+};
+<span class="k">export default</span> meta;
+
+<span class="k">type</span> <span class="ty">Story</span> = <span class="ty">StoryObj</span>&lt;<span class="k">typeof</span> StatusBadge&gt;;
+
+<span class="c">// Each export is one state of the component.</span>
+<span class="k">export const</span> Open: <span class="ty">Story</span> = {};
+
+<span class="k">export const</span> Cancelled: <span class="ty">Story</span> = {
+  args: { label: <span class="s">'Cancelled'</span>, status: <span class="s">'cancelled'</span> },
+};
+
+<span class="k">export const</span> LongLabel: <span class="ty">Story</span> = {
+  args: { label: <span class="s">'Pending third party confirmation'</span>, status: <span class="s">'open'</span> },
+};</code></pre>
+
+        <h3 class="h3">What belongs in the common library</h3>
+        <div class="split">
+          <div class="card card--good">
+            <span class="tag tag--green">Yes</span>
+            <ul class="list">
+              <li>Knows nothing about orders, users, or any domain</li>
+              <li>All data arrives through props</li>
+              <li>Fetches nothing and reads no global state</li>
+              <li>Used in at least two features</li>
+              <li>Has a story covering its meaningful states</li>
+            </ul>
+          </div>
+          <div class="card card--bad">
+            <span class="tag tag--red">No</span>
+            <ul class="list">
+              <li>Imports a domain type such as <code>Order</code></li>
+              <li>Calls an API or a query hook internally</li>
+              <li>Reads route params or app context</li>
+              <li>Used in exactly one place, speculatively generalised</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="figure">
+          <div class="figure__placeholder">
+            <span class="placeholder__label">Image placeholder</span>
+            <p class="placeholder__desc">
+              Screenshot of our Storybook sidebar showing the Common component
+              tree, with one component open and its controls panel visible.
+            </p>
+            <code class="placeholder__path">assets/storybook-overview.png</code>
+          </div>
+          <p class="figure__caption">
+            Figure 8. Our component catalogue. Bookmark it before you write
+            anything new.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- FOLDERS ---------- -->
+      <section class="section" id="folders">
+        <div class="section__head">
+          <span class="section__num">15</span>
+          <h2 class="section__title">Folder Structure</h2>
+        </div>
+        <p class="lede">
+          We group by feature, not by file type. A folder should tell you what
+          the app does, not what technologies it uses. Everything one feature
+          needs lives together.
+        </p>
+
+        <div class="split">
+          <div class="card card--bad">
+            <span class="tag tag--red">Grouped by type</span>
+            <pre class="code code--sm"><code>src/
+  components/     <span class="c">// 200 files</span>
+  hooks/          <span class="c">// 80 files</span>
+  types/
+  utils/
+  api/
+
+<span class="c">// One feature change means</span>
+<span class="c">// touching five distant folders.</span></code></pre>
+          </div>
+          <div class="card card--good">
+            <span class="tag tag--green">Grouped by feature</span>
+            <pre class="code code--sm"><code>src/
+  features/
+    orders/
+    invoices/
+    settings/
+
+<span class="c">// A feature is self contained.</span>
+<span class="c">// Deleting it is one folder.</span></code></pre>
+          </div>
+        </div>
+
+        <h3 class="h3">The layout</h3>
+        <pre class="code code--tree"><code>src/
+├── main.tsx                    <span class="c">// entry point, mounts React to the DOM</span>
+├── App.tsx                     <span class="c">// providers and router</span>
+│
+├── app/
+│   ├── router.tsx              <span class="c">// route definitions</span>
+│   ├── theme.ts                <span class="c">// MUI theme</span>
+│   └── providers.tsx           <span class="c">// QueryClient, Theme, Auth wrappers</span>
+│
+├── components/                 <span class="c">// COMMON. Domain agnostic. In Storybook.</span>
+│   ├── Button/
+│   │   ├── Button.tsx
+│   │   ├── Button.stories.tsx
+│   │   ├── Button.test.tsx
+│   │   └── index.ts            <span class="c">// re-export, keeps imports tidy</span>
+│   ├── DataTable/
+│   └── EmptyState/
+│
+├── features/                   <span class="c">// DOMAIN. One folder per business area.</span>
+│   └── orders/
+│       ├── api/
+│       │   └── orderApi.ts     <span class="c">// fetch functions, no React</span>
+│       ├── hooks/
+│       │   ├── useOrder.ts
+│       │   └── useOrders.ts
+│       ├── components/         <span class="c">// order specific, not reusable outside</span>
+│       │   ├── OrderSummary.tsx
+│       │   └── OrderTimeline.tsx
+│       ├── pages/
+│       │   ├── OrderListPage.tsx
+│       │   └── OrderDetailPage.tsx
+│       └── types.ts            <span class="c">// Order, OrderStatus, payloads</span>
+│
+├── hooks/                      <span class="c">// shared, domain agnostic hooks</span>
+│   ├── useDebounced.ts
+│   └── useLocalStorage.ts
+│
+├── lib/                        <span class="c">// third party config and wrappers</span>
+│   ├── httpClient.ts
+│   └── queryClient.ts
+│
+└── utils/                      <span class="c">// pure functions, no React</span>
+    ├── formatCurrency.ts
+    └── formatDate.ts</code></pre>
+
+        <div class="grid3">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">Import direction</h4>
+            <p class="card__desc">
+              Features may import from <code>components</code>,
+              <code>hooks</code>, <code>lib</code>, <code>utils</code>. Those must
+              never import from a feature. One way only.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">No cross feature imports</h4>
+            <p class="card__desc">
+              If <code>invoices</code> needs something from <code>orders</code>,
+              that shared thing should move up a level. Otherwise you build a
+              tangle nobody can unpick.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Colocate tests and stories</h4>
+            <p class="card__desc">
+              Next to the file they cover, never in a distant mirror tree. Moving
+              a component moves everything with it.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="h3">Path aliases</h3>
+        <pre class="code"><code><span class="c">// vite.config.ts and tsconfig.json both need this.</span>
+resolve: {
+  alias: { <span class="s">'@'</span>: path.<span class="f">resolve</span>(__dirname, <span class="s">'./src'</span>) }
+}
+
+<span class="c">// Then imports stay readable no matter how deep the file is.</span>
+<span class="k">import</span> { Button } <span class="k">from</span> <span class="s">'@/components/Button'</span>;          <span class="c">// clear</span>
+<span class="k">import</span> { Button } <span class="k">from</span> <span class="s">'../../../components/Button'</span>;    <span class="c">// fragile</span></code></pre>
+      </section>
+
+      <!-- ---------- TOOLCHAIN ---------- -->
+      <section class="section" id="toolchain">
+        <div class="section__head">
+          <span class="section__num">16</span>
+          <h2 class="section__title">Vite and the Toolchain</h2>
+        </div>
+        <p class="lede">
+          Browsers cannot run TypeScript, JSX, or bare module imports. A build
+          tool translates your source into something they can execute. Vite does
+          that fast enough to feel instant.
+        </p>
+
+        <div class="figure">
+          <div class="figure__frame">
+            <svg viewBox="0 0 900 210" class="diagram" role="img" aria-label="Vite build pipeline">
+              <rect x="20" y="26" width="170" height="120" rx="8" class="dg-box dg-box--soft" />
+              <text x="105" y="52" class="dg-text dg-text--sm">Source</text>
+              <text x="105" y="78" class="dg-text dg-text--mono">.tsx .ts</text>
+              <text x="105" y="98" class="dg-text dg-text--mono">.css</text>
+              <text x="105" y="118" class="dg-text dg-text--mono">node_modules</text>
+
+              <path d="M196 86 L242 86" class="dg-line dg-line--arrow" />
+              <path d="M235 80 L244 86 L235 92" class="dg-line dg-line--arrow" />
+
+              <rect x="250" y="26" width="200" height="120" rx="8" class="dg-box dg-box--primary" />
+              <text x="350" y="52" class="dg-text dg-text--inv dg-text--sm">Vite</text>
+              <text x="350" y="78" class="dg-text dg-text--invxs">strips types</text>
+              <text x="350" y="98" class="dg-text dg-text--invxs">compiles JSX</text>
+              <text x="350" y="118" class="dg-text dg-text--invxs">bundles and minifies</text>
+
+              <path d="M456 86 L502 86" class="dg-line dg-line--arrow" />
+              <path d="M495 80 L504 86 L495 92" class="dg-line dg-line--arrow" />
+
+              <rect x="510" y="26" width="180" height="52" rx="8" class="dg-box" />
+              <text x="600" y="48" class="dg-text dg-text--xs">Dev server</text>
+              <text x="600" y="66" class="dg-text dg-text--mono">HMR, instant</text>
+
+              <rect x="510" y="94" width="180" height="52" rx="8" class="dg-box" />
+              <text x="600" y="116" class="dg-text dg-text--xs">Production build</text>
+              <text x="600" y="134" class="dg-text dg-text--mono">dist/</text>
+
+              <path d="M696 120 L742 120" class="dg-line dg-line--arrow" />
+              <path d="M735 114 L744 120 L735 126" class="dg-line dg-line--arrow" />
+              <rect x="750" y="94" width="130" height="52" rx="8" class="dg-box dg-box--soft" />
+              <text x="815" y="124" class="dg-text dg-text--xs">Static hosting</text>
+            </svg>
+          </div>
+          <p class="figure__caption">
+            Figure 9. In development Vite serves modules on demand. For
+            production it bundles everything into static files.
+          </p>
+        </div>
+
+        <div class="maptable maptable--two">
+          <div class="maptable__row maptable__row--head">
+            <span>File</span>
+            <span>What it controls</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>package.json</code></span>
+            <span>Dependencies and the scripts you run</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>package-lock.json</code></span>
+            <span>Exact resolved versions. Commit it, never edit it</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>tsconfig.json</code></span>
+            <span>Compiler strictness and path aliases</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>vite.config.ts</code></span>
+            <span>Plugins, dev server proxy, build output</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>.eslintrc / eslint.config.js</code></span>
+            <span>Lint rules enforced in CI</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>node_modules/</code></span>
+            <span>Installed packages. Never commit this</span>
+          </div>
+        </div>
+
+        <h3 class="h3">Environment variables</h3>
+        <pre class="code"><code><span class="c">// .env.development</span>
+VITE_API_BASE_URL=http://localhost:8080/api
+
+<span class="c">// Only names prefixed with VITE_ are exposed to the client.</span>
+<span class="k">const</span> baseUrl = import.meta.env.VITE_API_BASE_URL;</code></pre>
+
+        <div class="callout callout--warn">
+          <span class="callout__label">Security</span>
+          <p>
+            Everything in a frontend bundle is public. Anyone can open DevTools
+            and read it. Never put an API secret, a signing key, or a database
+            credential in a <code>VITE_</code> variable. If it must stay secret,
+            it belongs on your side of the wire.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- DEVTOOLS ---------- -->
+      <section class="section" id="devtools">
+        <div class="section__head">
+          <span class="section__num">17</span>
+          <h2 class="section__title">React DevTools</h2>
+        </div>
+        <p class="lede">
+          A browser extension that adds React aware panels to DevTools. Without
+          it you are inspecting compiled DOM output. With it you inspect the
+          component tree and its live state.
+        </p>
+
+        <div class="callout">
+          <span class="callout__label">Install</span>
+          <p>
+            Available for Chrome and Firefox as
+            <strong>React Developer Tools</strong>. Once installed, two new tabs
+            appear in DevTools on any React page: <strong>Components</strong> and
+            <strong>Profiler</strong>.
+          </p>
+        </div>
+
+        <div class="figure">
+          <div class="figure__placeholder">
+            <span class="placeholder__label">Image placeholder</span>
+            <p class="placeholder__desc">
+              Screenshot of the React DevTools Components tab on one of our
+              pages, with a component selected so its props and hooks are visible
+              in the right hand panel.
+            </p>
+            <code class="placeholder__path">assets/react-devtools-components.png</code>
+          </div>
+          <p class="figure__caption">
+            Figure 10. Component tree on the left, props and hook state on the
+            right, editable live.
+          </p>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <span class="card__num">01</span>
+            <h4 class="card__title">Inspect the tree</h4>
+            <p class="card__desc">
+              See the actual component hierarchy with your own component names,
+              not a wall of anonymous divs. Select any node to see the props it
+              received.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">02</span>
+            <h4 class="card__title">Read and edit state live</h4>
+            <p class="card__desc">
+              Every hook is listed in order. You can change a value directly in
+              the panel and watch the UI respond, which is the fastest way to
+              reproduce an edge case.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Find the owner</h4>
+            <p class="card__desc">
+              When a prop has the wrong value, walk up the tree until you find
+              the component that produced it. That is where the bug is, not where
+              the symptom appeared.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__num">04</span>
+            <h4 class="card__title">Highlight updates</h4>
+            <p class="card__desc">
+              A setting that flashes a border around components as they
+              re-render. Useful for confirming whether something is rendering
+              when you did not expect it to.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="h3">A practical debugging order</h3>
+        <div class="steps">
+          <div class="step">
+            <span class="step__num">1</span>
+            <div class="step__body">
+              <h4 class="step__title">Is the data arriving</h4>
+              <p>
+                Network tab. Check the status code and the response body. If the
+                request failed or returned an unexpected shape, stop here. This
+                is your home territory.
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step__num">2</span>
+            <div class="step__body">
+              <h4 class="step__title">Is it in state</h4>
+              <p>
+                DevTools Components tab. Select the component that owns the
+                fetch and read its hook values. If the response was fine but
+                state is empty, the bug is between them.
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step__num">3</span>
+            <div class="step__body">
+              <h4 class="step__title">Is it reaching the child</h4>
+              <p>
+                Select the child that should display it and read its props. A
+                correct parent with an empty child prop means the value is not
+                being passed, or is being passed under a different name.
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step__num">4</span>
+            <div class="step__body">
+              <h4 class="step__title">Is it being rendered</h4>
+              <p>
+                Props are right but nothing appears. Look for a conditional above
+                the render, a filter that removes everything, or a CSS rule
+                hiding the element. Check the Elements tab.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="h3">Errors you will see early</h3>
+        <div class="maptable maptable--two">
+          <div class="maptable__row maptable__row--head">
+            <span>Message</span>
+            <span>What it actually means</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Cannot read properties of undefined</code></span>
+            <span>Data has not arrived yet. Guard with a loading branch or optional chaining</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Each child should have a unique "key"</code></span>
+            <span>A <code>.map()</code> is missing <code>key</code>, or keys are duplicated</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Too many re-renders</code></span>
+            <span>You called a setter during render instead of inside a handler or effect</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Objects are not valid as a React child</code></span>
+            <span>You rendered <code>{someObject}</code>. Render a specific field instead</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>Rendered more hooks than during the previous render</code></span>
+            <span>A hook is inside a condition or loop. Hooks must always run in the same order</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>A component is changing an uncontrolled input to be controlled</code></span>
+            <span>The <code>value</code> prop started as <code>undefined</code>. Give it an initial value</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- RECAP ---------- -->
+      <section class="section" id="recap">
+        <div class="section__head">
+          <span class="section__num">18</span>
+          <h2 class="section__title">Recap</h2>
+        </div>
+        <p class="lede">
+          If you keep six things from this session, keep these.
+        </p>
+
+        <div class="grid2">
+          <div class="card card--accent">
+            <span class="card__num">01</span>
+            <h4 class="card__title">UI is a function of state</h4>
+            <p class="card__desc">
+              Describe the output for the current state. When the screen is
+              wrong, find the wrong state. Do not reach for the DOM.
+            </p>
+          </div>
+          <div class="card card--accent">
+            <span class="card__num">02</span>
+            <h4 class="card__title">Data down, events up</h4>
+            <p class="card__desc">
+              One owner per piece of state. Children receive values and report
+              intentions. Never mutate a prop.
+            </p>
+          </div>
+          <div class="card card--accent">
+            <span class="card__num">03</span>
+            <h4 class="card__title">Every fetch has three states</h4>
+            <p class="card__desc">
+              Loading, error, success. Design all three. Server data is a cache
+              of someone else's truth, not your state.
+            </p>
+          </div>
+          <div class="card card--accent">
+            <span class="card__num">04</span>
+            <h4 class="card__title">Types are a build time contract</h4>
+            <p class="card__desc">
+              They vanish at runtime. Validate at the network boundary where you
+              do not control the shape.
+            </p>
+          </div>
+          <div class="card card--accent">
+            <span class="card__num">05</span>
+            <h4 class="card__title">Check Storybook first</h4>
+            <p class="card__desc">
+              The component you are about to write may already exist. If it is
+              genuinely new and domain agnostic, add a story.
+            </p>
+          </div>
+          <div class="card card--accent">
+            <span class="card__num">06</span>
+            <h4 class="card__title">Group by feature</h4>
+            <p class="card__desc">
+              Everything a feature needs lives in its folder. Common code flows
+              downward into features, never the other way.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="h3">Where to go next</h3>
+        <div class="maptable maptable--two">
+          <div class="maptable__row maptable__row--head">
+            <span>Resource</span>
+            <span>Why</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>react.dev/learn</code></span>
+            <span>The official tutorial. Rewritten around hooks, genuinely good</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>typescriptlang.org/docs/handbook</code></span>
+            <span>Reference for anything in the TypeScript sections above</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>mui.com/material-ui/getting-started</code></span>
+            <span>Component API reference. Search here before building</span>
+          </div>
+          <div class="maptable__row">
+            <span><code>react-hook-form.com</code></span>
+            <span>Especially the Controller and validation pages</span>
+          </div>
+          <div class="maptable__row">
+            <span>Our Storybook</span>
+            <span>The components you should actually be using</span>
+          </div>
+        </div>
+
+        <div class="callout">
+          <span class="callout__label">Suggested first task</span>
+          <p>
+            Pick a small existing page in our codebase. Open it alongside React
+            DevTools, find where its data comes from, and follow it down to the
+            component that renders it. Then change one prop in DevTools and watch
+            what updates. That loop teaches more than any amount of reading.
+          </p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer__inner">
+          <span class="footer__title">Frontend Crossover</span>
+          <span class="footer__meta">React and TypeScript · Internal engineering session</span>
+        </div>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
